@@ -47,4 +47,4 @@ jobs:
         if: failure()
         run: |
           sudo apt-get install mailutils
-          echo "Body with msg: ${{ steps.test.outputs.result }}" | mail -s "Subject" akalankaperera128@gmail.com
+          echo "Body with msg: ${{ steps.test.outputs.result }}" | mail -s "Subject" it21072642@my.sliit.lk
