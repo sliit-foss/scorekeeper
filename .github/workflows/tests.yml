@@ -1,0 +1,19 @@
+name: Run Tests
+
+on:
+  repository_dispatch:
+    types: [run-tests]
+
+jobs:
+  build:
+    name: Run Some Thing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do Something
+        run: echo Doing Something...
+
+      - name: Echo payload
+        run: echo ${{ github.event.client_payload }}
+
+      - name: Echo github variables
+        run: echo ${{ toJson(github) }}
