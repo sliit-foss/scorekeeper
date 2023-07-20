@@ -43,8 +43,7 @@ jobs:
         run: |
           node scripts/test.js --payload "${{ toJson(github.event.client_payload) }}"
 
-      - name: Notify on failure
-        if: failure()
+      - name: Email Workflow URL
         run: |
           sudo apt-get install mailutils
-          echo "Body with msg: ${{ steps.test.outputs.result }}" | mail -s "Subject" it21072642@my.sliit.lk
+          echo "Check out the workflow run at - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} | mail -s "Workflow URL" it21072642@my.sliit.lk
