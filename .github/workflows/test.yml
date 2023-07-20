@@ -39,5 +39,12 @@ jobs:
         run: echo "${{ toJson(github.event.client_payload) }}"
 
       - name: Call Test Script
+        id: test
         run: |
           node scripts/test.js --payload "${{ toJson(github.event.client_payload) }}"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          sudo apt-get install mailutils
+          echo "Body with msg: ${{ steps.test.outputs.result }}" | mail -s "Subject" akalankaperera128@gmail.com
