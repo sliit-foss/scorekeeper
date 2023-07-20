@@ -1,7 +1,7 @@
 {
-  "name": "actions-api",
+  "name": "scorekeeper",
   "version": "1.0.0",
-  "description": "",
+  "description": "An automated testing and scoring solution which leverages the power of GitHub Actions",
   "main": "index.js",
   "scripts": {
     "format": "prettier --write \"**/*.{js,md}\" --cache"
