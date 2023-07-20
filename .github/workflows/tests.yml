@@ -5,15 +5,9 @@ on:
     types: [run-tests]
 
 jobs:
-  build:
-    name: Run Some Thing
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Do Something
-        run: echo Doing Something...
-
-      - name: Echo payload
-        run: echo ${{ github.event.client_payload }}
-
-      - name: Echo github variables
-        run: echo ${{ toJson(github) }}
+      - name: Echo client payload
+        run: echo ${{ toJson(github.event.client_payload) }}
