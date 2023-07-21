@@ -47,7 +47,9 @@ jobs:
           npm start
 
       - name: Run tests
-        run: npm run test
+        run: |
+          cd submission
+          npm test
 
       - name: Update scores
         id: test
