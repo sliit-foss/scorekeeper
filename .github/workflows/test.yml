@@ -9,12 +9,28 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
       
-      - uses: ./.github/actions/bootstrap
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.0.0
 
-      - name: Echo client payload
-        run: echo "${{ toJson(github.event.client_payload) }}"
+      - name: Install Node.js 16 and setup dependency caching
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --prod
+
+      - name: Download and extract submission files
+        run: |
+          curl -L "${{ github.event.client_payload.submission_url }}" -o submission.zip
+          unzip submission.zip
+          ls -all
 
       - name: Call Test Script
         id: test
@@ -24,4 +40,4 @@ jobs:
       - name: Email Workflow URL
         run: |
           sudo apt-get install mailutils
-          echo "Check out the workflow run at - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" | mail -s "Workflow URL" it21072642@my.sliit.lk
+          echo "Check out the workflow run at - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" | mail -s "Workflow URL" ${{ github.event.client_payload.email }}
