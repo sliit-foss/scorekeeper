@@ -19,10 +19,10 @@ jobs:
         with:
           version: 8.0.0
 
-      - name: Install Node.js 16 and setup dependency caching
+      - name: Install Node.js 18 and setup dependency caching
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -38,8 +38,6 @@ jobs:
           curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
           unzip question.zip -d question
           cp -rf question/tests ./submission
-          cat question/package.json
-          cat submission/package.json
 
       - name: Execute answer script
         run: |
@@ -51,7 +49,6 @@ jobs:
       - name: Run tests
         run: |
           cd submission
-          cat package.json
           npm test
 
       - name: Update scores
