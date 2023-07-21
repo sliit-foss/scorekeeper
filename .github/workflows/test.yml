@@ -25,9 +25,6 @@ jobs:
           node-version: 18.x
           cache: 'pnpm'
 
-      - name: Install Process Manager 2
-        run: pnpm install -g pm2
-
       - name: Install dependencies
         run: pnpm install --prod --ignore-scripts
 
@@ -45,14 +42,14 @@ jobs:
       - name: Execute answer script
         run: |
           cd submission
+          chmod +x script.sh
           npm install --ignore-scripts
-          pm2 start npm --name "scorekeeper" -- start
+          npm start
 
       - name: Run tests
         run: |
           cd submission
           npm test
-          pm2 stop scorekeeper
 
       - name: Update scores
         id: test
