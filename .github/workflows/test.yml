@@ -38,8 +38,8 @@ jobs:
           curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
           unzip question.zip -d question
           cp -rf question/tests ./submission
-          cat question/tests/package.json
-          cat submission/tests/package.json
+          cat question/package.json
+          cat submission/package.json
 
       - name: Execute answer script
         run: |
