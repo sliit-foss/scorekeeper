@@ -28,7 +28,9 @@ jobs:
 
       - name: Mask Submission URL
         run: |
-          echo "::add-mask::${{ github.event.client_payload.submission_url }}"
+          echo "::add-mask::$SUBMISSION_URL"
+        env:
+          SUBMISSION_URL: ${{ github.event.client_payload.submission_url }}
 
       - name: Download and extract submission files
         run: |
