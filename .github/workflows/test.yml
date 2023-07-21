@@ -48,7 +48,9 @@ jobs:
 
       - name: Run tests
         run: |
+          ls -all
           cd submission
+          ls -all
           npm test
 
       - name: Update scores
