@@ -26,16 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --prod --ignore-scripts
 
-      - name: Mask Submission URL
-        run: |
-          echo "::add-mask::$SUBMISSION_URL"
-        env:
-          SUBMISSION_URL: ${{ github.event.client_payload.submission_url }}
-
       - name: Download and extract submission files
         run: |
-          submission_url="${{ github.event.client_payload.submission_url }}"
-          curl -L "${{ github.event.client_payload.submission_url }}" -o submission.zip
+          curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
           unzip submission.zip -d submission
           ls -all
           cd submission
