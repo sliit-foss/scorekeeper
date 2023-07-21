@@ -9,8 +9,10 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/actions/bootstrap
+      - uses: actions/checkout@v3
       
+      - uses: ./.github/actions/bootstrap
+
       - name: Echo client payload
         run: echo "${{ toJson(github.event.client_payload) }}"
 
