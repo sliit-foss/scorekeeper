@@ -24,7 +24,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install --prod
+        run: pnpm install --prod --ignore-scripts
 
       - name: Download and extract submission files
         run: |

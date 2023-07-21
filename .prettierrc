@@ -1,7 +1,12 @@
 {
     "printWidth": 120,
-    "tabWidth": 2,
+    "bracketSameLine": true,
+    "bracketSpacing": true,
     "singleQuote": true,
-    "trailingComma": "all",
-    "arrowParens": "always"
-}
+    "quoteProps": "consistent",
+    "trailingComma": "none",
+    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+    "importOrder": [],
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true
+  }
