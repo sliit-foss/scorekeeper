@@ -1,7 +1,6 @@
 {
   "extends": [
-    "@sliit-foss/eslint-config-internal",
-    "turbo"
+    "@sliit-foss/eslint-config-internal"
   ],
   "env": {
     "browser": false,

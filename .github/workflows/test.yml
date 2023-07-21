@@ -8,10 +8,12 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -21,7 +23,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --prod --ignore-scripts
@@ -30,14 +32,26 @@ jobs:
         run: |
           curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
           unzip submission.zip -d submission
-          ls -all
-          cd submission
-          ls -all
 
-      - name: Call Test Script
-        id: test
+      - name: Download and extract tests from question file
         run: |
-          node scripts/test.js --payload "${{ toJson(github.event.client_payload) }}"
+          curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
+          unzip question.zip -d question
+          cp -rf question/tests ./submission
+
+      - name: Execute answer script
+        run: |
+          cd submission
+          chmod +x script.sh
+          npm install --ignore-scripts
+          npm start
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Update scores
+        id: test
+        run: node src/index.js --payload "${{ toJson(github.event.client_payload) }}" --script update-scores
 
       - name: Email Workflow URL
         run: |
