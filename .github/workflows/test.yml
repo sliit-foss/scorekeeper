@@ -28,8 +28,11 @@ jobs:
 
       - name: Download and extract submission files
         run: |
+          echo '::add-mask::submission-url'
           curl -L "${{ github.event.client_payload.submission_url }}" -o submission.zip
-          unzip submission.zip
+          unzip submission.zip -d submission
+          ls -all
+          cd submission
           ls -all
 
       - name: Call Test Script
