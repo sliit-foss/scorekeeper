@@ -42,7 +42,6 @@ jobs:
       - name: Execute answer script
         run: |
           cd submission
-          chmod +x script.sh
           npm install --ignore-scripts
           npm start
 
