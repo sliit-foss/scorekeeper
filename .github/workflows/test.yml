@@ -29,7 +29,7 @@ jobs:
         run: pnpm install --prod --ignore-scripts
 
       - name: Email Workflow URL
-        run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --payload "${{ toJson(github.event.client_payload) }}"
+        run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --payload "${{ github.event.client_payload }}"
         env:
           NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
           NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
