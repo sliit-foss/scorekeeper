@@ -18,7 +18,7 @@ const options = program.opts();
   if (options.script === 'email-workflow-url') {
     await require('./scripts/email-workflow-url').execute(options.email, options.workflowUrl);
   } else {
-    require('./scripts/update-scores').execute(options.submissionId);
+    require('./scripts/update-score').execute(options.submissionId);
   }
   process.exit(0);
 })();

@@ -58,6 +58,5 @@ jobs:
           cd submission
           npm test
 
-      - name: Update scores
-        id: test
-        run: node src/index.js --script update-scores --payload "${{ toJson(github.event.client_payload) }}"
+      - name: Update score
+        run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
