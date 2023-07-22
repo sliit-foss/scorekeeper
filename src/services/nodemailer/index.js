@@ -30,8 +30,6 @@ exports.sendMailViaNodemailer = ({
   const template = handlebars.compile(templateHTML);
   const htmlToSend = template(templateData);
 
-  console.log(`Sending email to ${to} with subject ${subject}`);
-
   if (!Array.isArray(to)) to = [to];
 
   const mailOptions = {
