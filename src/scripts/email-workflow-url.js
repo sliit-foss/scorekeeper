@@ -1,7 +1,7 @@
 const { sendMailViaNodemailer } = require('../services/nodemailer');
 
-const execute = async (email, workflowUrl) => {
-  await sendMailViaNodemailer({
+const execute = (email, workflowUrl) => {
+  return sendMailViaNodemailer({
     template: 'call_to_action',
     data: {
       header: 'Test Results',

@@ -14,8 +14,11 @@ program.parse();
 
 const options = program.opts();
 
-if (options.script === 'email-workflow-url') {
-  require('./scripts/email-workflow-url').execute(options.email, options.workflowUrl);
-} else {
-  require('./scripts/update-scores').execute(options.submissionId);
-}
+(async () => {
+  if (options.script === 'email-workflow-url') {
+    await require('./scripts/email-workflow-url').execute(options.email, options.workflowUrl);
+  } else {
+    require('./scripts/update-scores').execute(options.submissionId);
+  }
+  process.exit(0);
+})();
