@@ -9,7 +9,7 @@ const execute = async (email, workflowUrl) => {
       c2a_link: workflowUrl,
       c2a_button: 'View Workflow Run'
     },
-    options: { to: email }
+    options: { to: email, subject: 'Bashaway submission test execution results' }
   });
 };
 

@@ -29,6 +29,9 @@ exports.sendMailViaNodemailer = ({
   }
   const template = handlebars.compile(templateHTML);
   const htmlToSend = template(templateData);
+
+  if (!Array.isArray(to)) to = [to];
+
   const mailOptions = {
     from: {
       name: 'SLIIT FOSS Community',
