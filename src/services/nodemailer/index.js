@@ -21,7 +21,6 @@ exports.sendMailViaNodemailer = ({
   data: templateData = {},
   options: { to, cc, bcc, subject, attachments = [] } = {}
 }) => {
-  const replacements = JSON.parse(templateData);
   let templateHTML;
   try {
     templateHTML = fs.readFileSync(`${__dirname}/templates/${templateName}.html`, 'utf8');
@@ -29,7 +28,7 @@ exports.sendMailViaNodemailer = ({
     throw new Error(`Template not found - ${templateName}`);
   }
   const template = handlebars.compile(templateHTML);
-  const htmlToSend = template(replacements);
+  const htmlToSend = template(templateData);
   const mailOptions = {
     from: {
       name: 'SLIIT FOSS Community',

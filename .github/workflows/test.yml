@@ -30,7 +30,12 @@ jobs:
 
       - name: Email Workflow URL
         run: node src/index.js --script email-workflow-url  --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --payload "${{ toJson(github.event.client_payload) }}"
-
+        env:
+          NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
+          NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
+          NODEMAILER_MAIL_USER: ${{ secrets.NODEMAILER_MAIL_USER }}
+          NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
+        
       - name: Download and extract submission files
         run: |
           curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
