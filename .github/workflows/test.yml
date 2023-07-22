@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --prod --ignore-scripts
 
+      - name: Email Workflow URL
+        run: node src/index.js --script email-workflow-url  --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --payload "${{ toJson(github.event.client_payload) }}"
+
       - name: Download and extract submission files
         run: |
           curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
@@ -52,9 +55,4 @@ jobs:
 
       - name: Update scores
         id: test
-        run: node src/index.js --payload "${{ toJson(github.event.client_payload) }}" --script update-scores
-
-      - name: Email Workflow URL
-        run: |
-          sudo apt-get install mailutils
-          echo "Check out the workflow run at - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" | mail -s "Workflow URL" ${{ github.event.client_payload.email }}
+        run: node src/index.js --script update-scores --payload "${{ toJson(github.event.client_payload) }}"

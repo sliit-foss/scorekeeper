@@ -4,10 +4,17 @@ if (process.env.NODE_ENV !== 'production') {
 
 const { program } = require('commander');
 
-program.requiredOption('-p, --payload <string>').requiredOption('-s, --script <string>');
+program
+  .requiredOption('-s, --script <string>')
+  .requiredOption('-p, --payload <string>')
+  .option('-url, --workflow-url <string>');
 
 program.parse();
 
 const options = program.opts();
 
-console.log(options.payload);
+if (options.script === 'email-workflow-url') {
+  require('./scripts/email-workflow-url').execute(options.payload.email, options.workflowUrl);
+} else {
+  require('./scripts/update-scores').execute(options.payload.submission_id);
+}
