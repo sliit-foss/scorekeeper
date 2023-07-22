@@ -6,19 +6,16 @@ const { program } = require('commander');
 
 program
   .requiredOption('-s, --script <string>')
-  .requiredOption('-p, --payload <string>')
-  .option('-url, --workflow-url <string>');
+  .option('-e, --email <string>')
+  .option('-url, --workflow-url <string>')
+  .option('-s, --submission-id <string>');
 
 program.parse();
 
 const options = program.opts();
 
-console.log(options.payload);
-
-console.log(JSON.parse(options.payload));
-
 if (options.script === 'email-workflow-url') {
-  require('./scripts/email-workflow-url').execute(options.payload.email, options.workflowUrl);
+  require('./scripts/email-workflow-url').execute(options.email, options.workflowUrl);
 } else {
-  require('./scripts/update-scores').execute(options.payload.submission_id);
+  require('./scripts/update-scores').execute(options.submissionId);
 }

@@ -29,9 +29,7 @@ jobs:
         run: pnpm install --prod --ignore-scripts
 
       - name: Email Workflow URL
-        run: |
-          sudo apt-get install jq
-          node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --payload $(echo "${{ toJson(github.event.client_payload) }}" | jq --slurp --raw-input .)
+        run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --email "${{ github.event.client_payload.email }}"
         env:
           NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
           NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
