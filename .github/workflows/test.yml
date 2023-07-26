@@ -50,13 +50,12 @@ jobs:
       - name: Execute answer script
         run: |
           cd submission
-          npm install --ignore-scripts
-          npm start
+          bash execute.sh
 
       - name: Run tests
         run: |
           cd submission
-          npm test
+          bash test.sh
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
