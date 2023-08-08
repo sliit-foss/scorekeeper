@@ -56,15 +56,13 @@ jobs:
           rm -rf submission/out
 
       - name: Install submission dependencies
-        run: |
-          cd submission
-          pnpm install --ignore-scripts
+        run: cd submission && pnpm install --ignore-scripts
 
       - name: Execute answer script
-        run: bash execute.sh
-          
+        run: cd submission && bash execute.sh
+        
       - name: Run tests
-        run: pnpm test
+        run: cd submission && pnpm test
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
