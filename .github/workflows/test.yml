@@ -1,4 +1,5 @@
 name: Run Tests
+run-name: "Evalutate submission - ${{ github.event.client_payload.submission_id }}"
 
 on:
   repository_dispatch:
