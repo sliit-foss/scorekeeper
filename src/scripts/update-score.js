@@ -1,5 +1,7 @@
+const { updateScore } = require('../services/score');
+
 const execute = (submissionId) => {
-  console.log(`Updating score for submission ${submissionId}`);
+  return updateScore(submissionId);
 };
 
 exports.execute = execute;
