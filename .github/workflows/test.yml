@@ -66,3 +66,5 @@ jobs:
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
+        env:
+          BASHAWAY_SERVER_URL: ${{ secrets.BASHAWAY_SERVER_URL }}
