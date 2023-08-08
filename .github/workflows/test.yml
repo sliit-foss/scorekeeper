@@ -55,14 +55,12 @@ jobs:
 
           rm -rf submission/out
 
-      - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts
-
-      - name: Execute answer script
-        run: cd submission && bash execute.sh
-        
-      - name: Run tests
-        run: cd submission && pnpm exec jest
+      - name: Execute and run tests
+        run: |
+          cd submission 
+          pnpm install --ignore-scripts
+          bash execute.sh
+          pnpm exec jest
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
