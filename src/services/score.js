@@ -6,5 +6,9 @@ const connector = serviceConnector({
 });
 
 exports.updateScore = (id) => {
-  return connector.post(`/api/submissions/${id}`).then(connector.resolve);
+  return connector
+    .patch(`/api/submissions/${id}`, {
+      automatically_graded: true
+    })
+    .then(connector.resolve);
 };

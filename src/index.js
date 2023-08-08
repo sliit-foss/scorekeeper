@@ -19,4 +19,7 @@ const options = program.opts();
     await require('./scripts/update-score').execute(options.submissionId);
   }
   process.exit(0);
-})();
+})().catch((err) => {
+  console.error(`Error in ${options.script} script execution`, err);
+  process.exit(1);
+});
