@@ -14,6 +14,7 @@
   "dependencies": {
     "@sliit-foss/service-connector": "1.2.3",
     "commander": "11.0.0",
+    "dotenv": "16.1.3",
     "handlebars": "4.7.7",
     "nodemailer": "6.9.4"
   },
@@ -22,7 +23,6 @@
     "@commitlint/config-conventional": "17.6.5",
     "@sliit-foss/eslint-config-internal": "1.1.4",
     "@trivago/prettier-plugin-sort-imports": "4.1.1",
-    "dotenv": "16.1.3",
     "eslint": "8.45.0",
     "eslint-plugin-import": "2.27.5",
     "lefthook": "1.4.3",
