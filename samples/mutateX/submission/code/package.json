@@ -2,7 +2,7 @@
   "name": "mutate-x",
   "scripts": {
     "execute": "bash execute.sh",
-    "test": "jest test/index.test.js"
+    "test": "jest"
   },
   "devDependencies": {
     "@sliit-foss/bashaway": "1.2.0",
