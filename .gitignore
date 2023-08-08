@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 sentinel.json
+
+samples/**/pnpm-lock.yaml
