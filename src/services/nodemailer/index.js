@@ -35,7 +35,7 @@ exports.sendMailViaNodemailer = ({
   const mailOptions = {
     from: {
       name: 'SLIIT FOSS Community',
-      address: process.env.NODEMAILER_MAIL_DISPLAY_USER ?? process.env.NODEMAILER_MAIL_USER
+      address: 'infosliitfoss@gmail.com'
     },
     to,
     cc,
