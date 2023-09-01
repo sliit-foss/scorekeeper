@@ -34,6 +34,7 @@ jobs:
           NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
           NODEMAILER_MAIL_USER: ${{ secrets.NODEMAILER_MAIL_USER }}
           NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
+          NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
         
       - name: Download and extract submission files
         run: |
