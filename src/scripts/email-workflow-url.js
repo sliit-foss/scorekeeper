@@ -6,8 +6,9 @@ const execute = (email, workflowUrl) => {
     data: {
       header: 'Test Results',
       text: 'Click below to view your test execution results.',
-      c2a_link: workflowUrl,
-      c2a_button: 'View Workflow Run'
+      action_link: workflowUrl,
+      action_text: 'View Workflow Run',
+      disclaimer_text: "You've received this email because you have uploaded a submission to Bashaway 2023."
     },
     options: { to: email, subject: 'Bashaway submission test execution results' }
   });
