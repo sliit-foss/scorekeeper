@@ -1,12 +1,10 @@
 on:
   workflow_call:
     inputs:
-      bashaway_server_url:
+      application_environment:
         type: string
-        required: true
-      bashaway_server_api_key:
-        type: string
-        required: true
+        required: false
+        default: 'PRODUCTION'
 
 jobs:
   test:
@@ -73,5 +71,5 @@ jobs:
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
         env:
-          BASHAWAY_SERVER_URL: ${{ inputs.bashaway_server_url }}
-          BASHAWAY_SERVER_API_KEY: ${{ inputs.bashaway_server_api_key }}
+          BASHAWAY_SERVER_URL: ${{ secrets[format('BASHAWAY_{0}_SERVER_URL', inputs.application_environment)] }}
+          BASHAWAY_SERVER_API_KEY: ${{ secrets[format('BASHAWAY_{0}_SERVER_API_KEY', inputs.application_environment)] }}

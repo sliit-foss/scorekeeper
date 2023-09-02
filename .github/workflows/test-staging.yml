@@ -6,10 +6,9 @@ on:
     types: [run-staging-tests]
 
 jobs:
-  test:
-    name: Run Tests
+  staging-test:
+    name: Staging
     uses: ./.github/workflows/test.yml
     with:
-      bashaway_server_url: ${{ secrets.BASHAWAY_STAGING_SERVER_URL }}
-      bashaway_server_api_key: ${{ secrets.BASHAWAY_STAGING_SERVER_API_KEY }}
+      application_environment: STAGING
     secrets: inherit
