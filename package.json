@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint src --ext js,jsx,mdx --ignore-path .gitignore --fix --cache --report-unused-disable-directives",
-    "format": "prettier --write \"**/*.{js,md,html}\" --cache",
+    "format": "prettier --write \"**/*.{js,md,html,yml}\" --cache",
     "prepare": "lefthook install"
   },
   "keywords": [],

@@ -1,5 +1,5 @@
 name: Run Tests
-run-name: "Evalutate submission - ${{ github.event.client_payload.submission_id }}"
+run-name: 'Evalutate submission - ${{ github.event.client_payload.submission_id }}'
 
 on:
   repository_dispatch:
@@ -35,7 +35,7 @@ jobs:
           NODEMAILER_MAIL_USER: ${{ secrets.NODEMAILER_MAIL_USER }}
           NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
           NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
-        
+
       - name: Download and extract submission files
         run: |
           curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
@@ -56,13 +56,19 @@ jobs:
           rm -rf submission/out
 
       - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts
+        run: |
+          cd submission
+          pnpm install --ignore-scripts
 
       - name: Execute answer script
-        run: cd submission && bash execute.sh
-        
+        run: |
+          cd submission
+          bash execute.sh
+
       - name: Run tests
-        run: cd submission && pnpm exec jest
+        run: |
+          cd submission
+          pnpm exec jest
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
