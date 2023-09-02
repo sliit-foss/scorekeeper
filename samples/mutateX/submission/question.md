@@ -1,6 +1,6 @@
 ## Task
 
-Append and `X` to the end of the filename of the `mutate.txt` inside the `src` directory and copy it over to the `out` directory.
+Append an `X` to the end of the filename of the `mutate.txt` inside the `src` directory and copy it over to the `out` directory.
 
 ### Constraints
 
