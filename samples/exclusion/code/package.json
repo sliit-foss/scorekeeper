@@ -1,5 +1,5 @@
 {
-  "name": "clockwise",
+  "name": "exclusion",
   "scripts": {
     "execute": "bash execute.sh",
     "test": "jest"

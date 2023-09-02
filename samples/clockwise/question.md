@@ -6,9 +6,9 @@ In the realm of coding quests, an intrepid developer embarks on a quest to unloc
 
 - The script must be **purely written in bash**.
 
-- The output must be obtained in one line. (Expressions cannot be chained together with **&&** or **||**) 
+- The output must be obtained in one line. (Expressions cannot be chained together with **&&** or **||**)
 
-- he output script must be **less than 25 characters** in length.
+- The output script must be **less than 25 characters** in length.
 
 ### Output
 
