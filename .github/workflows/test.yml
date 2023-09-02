@@ -61,7 +61,7 @@ jobs:
       - name: Execute answer script
         run: |
           sudo apt-get install dos2unix
-          dos2unix execute.sh
+          dos2unix ./submission/execute.sh
           cd submission && bash execute.sh
 
       - name: Run tests
