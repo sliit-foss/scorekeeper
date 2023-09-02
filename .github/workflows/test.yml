@@ -51,9 +51,12 @@ jobs:
         run: |
           cp -rf question/test ./submission
           if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
-            cp -rf question/src ./submission
+            if [ -d question/src ]; then
+              cp -rf question/src ./submission
+            else
+              rm -rf submission/src
+            fi
           fi
-
           rm -rf submission/out
 
       - name: Install submission dependencies
