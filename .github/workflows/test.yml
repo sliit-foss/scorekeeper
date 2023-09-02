@@ -1,9 +1,12 @@
-name: Run Tests
-run-name: 'Evalutate submission - ${{ github.event.client_payload.submission_id }} - (${{ github.event.client_payload.app_env }})'
-
 on:
-  repository_dispatch:
-    types: [run-tests]
+  workflow_call:
+    inputs:
+      bashaway_server_url:
+        type: string
+        required: true
+      bashaway_server_api_key:
+        type: string
+        required: true
 
 jobs:
   test:
@@ -70,5 +73,5 @@ jobs:
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
         env:
-          BASHAWAY_SERVER_URL: ${{ github.event.client_payload.app_env == 'production' && secrets.BASHAWAY_PRODUCTION_SERVER_URL || secrets.BASHAWAY_STAGING_SERVER_URL }}
-          BASHAWAY_SERVER_API_KEY: ${{ github.event.client_payload.app_env == 'production' && secrets.BASHAWAY_PRODUCTION_SERVER_API_KEY || secrets.BASHAWAY_STAGING_SERVER_API_KEY }}
+          BASHAWAY_SERVER_URL: ${{ inputs.bashaway_server_url }}
+          BASHAWAY_SERVER_API_KEY: ${{ inputs.bashaway_server_api_key }}

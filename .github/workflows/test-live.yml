@@ -1,0 +1,15 @@
+name: Run Live Tests
+run-name: 'Evalutate submission - ${{ github.event.client_payload.submission_id }}'
+
+on:
+  repository_dispatch:
+    types: [run-production-tests]
+
+jobs:
+  test:
+    name: Run Tests
+    uses: ./.github/workflows/test.yml
+    with:
+      bashaway_server_url: ${{ secrets.BASHAWAY_PRODUCTION_SERVER_URL }}
+      bashaway_server_api_key: ${{ secrets.BASHAWAY_PRODUCTION_SERVER_API_KEY }}
+    secrets: inherit
