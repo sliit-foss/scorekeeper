@@ -59,7 +59,10 @@ jobs:
         run: cd submission && pnpm install --ignore-scripts
 
       - name: Execute answer script
-        run: cd submission && bash ./execute.sh
+        run: |
+          sudo apt-get install dos2unix
+          dos2unix execute.sh
+          cd submission && bash execute.sh
 
       - name: Run tests
         run: cd submission && pnpm exec jest
