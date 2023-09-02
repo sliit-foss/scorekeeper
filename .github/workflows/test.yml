@@ -1,5 +1,5 @@
 name: Run Tests
-run-name: 'Evalutate submission - ${{ github.event.client_payload.submission_id }} (${{ github.event.client_payload.app_env }})'
+run-name: 'Evalutate submission - ${{ github.event.client_payload.submission_id }} - (${{ github.event.client_payload.app_env }})'
 
 on:
   repository_dispatch:
@@ -59,7 +59,7 @@ jobs:
         run: cd submission && pnpm install --ignore-scripts
 
       - name: Execute answer script
-        run: cd submission && pnpm execute
+        run: cd submission && bash execute.sh
 
       - name: Run tests
         run: cd submission && pnpm exec jest
