@@ -6,6 +6,8 @@ on:
         required: false
         default: 'PRODUCTION'
 
+permissions: read-all
+
 jobs:
   test:
     name: Run Tests
