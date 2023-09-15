@@ -52,6 +52,7 @@ jobs:
       - name: Restore tests and inputs
         run: |
           cp -rf question/test ./submission
+          cp -f question/jest.config.js ./submission || true
           if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
             if [ -d question/src ]; then
               cp -rf question/src ./submission
