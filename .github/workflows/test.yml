@@ -55,10 +55,9 @@ jobs:
           cp -rf question/test ./submission
           cp -f question/jest.config.js ./submission || true
           if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
+            rm -rf submission/src
             if [ -d question/src ]; then
               cp -rf question/src ./submission
-            else
-              rm -rf submission/src
             fi
           fi
           rm -rf submission/out
