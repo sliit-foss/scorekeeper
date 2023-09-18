@@ -32,7 +32,7 @@ curl --location 'https://api.github.com/repos/sliit-foss/scorekeeper/dispatches'
 --header 'Authorization: Bearer {{personal_access_token}}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "event_type": "run-staging-tests", # or run-production-tests
+    "event_type": "run-{{env}}-tests",
     "client_payload": {
         "email": "akalankaperera128@gmail.com",
         "submission_id": "64d295ffc4d6d90618f8bf79",
