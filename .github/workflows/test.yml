@@ -63,7 +63,7 @@ jobs:
           rm -rf submission/out
 
       - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts
+        run: cd submission && pnpm install --ignore-scripts --fix-lockfile
 
       - name: Execute answer script
         run: |
