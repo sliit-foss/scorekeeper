@@ -4,7 +4,7 @@ Bestow the sacred **X** upon the file known as **mutate.txt** dwelling within th
 
 ### Constraints
 
-- The script must be **purely written in bash**.
+- The script must be **purely written in bash within the execute.sh file**.
 
 ### Output
 

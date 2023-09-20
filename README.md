@@ -42,6 +42,7 @@ curl --location 'https://api.github.com/repos/sliit-foss/scorekeeper/dispatches'
     }
 }'
 ```
+
 ## Constraints
 
 - The runner OS is Ubuntu 20.04 LTS. Please make sure your submission scripts are compatible with it.

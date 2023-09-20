@@ -4,7 +4,7 @@ Within a directory filled with mysterious text files bearing diverse names, your
 
 ### Constraints
 
-- The script must be **purely written in bash**.
+- The script must be **purely written in bash within the execute.sh file**.
 
 ### Output
 
