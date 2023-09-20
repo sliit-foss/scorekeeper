@@ -9,7 +9,7 @@ const {
   restrictPython
 } = require('@sliit-foss/bashaway');
 
-jest.setTimeout(240000);
+jest.setTimeout(60000);
 
 test('should validate if only bash files are present', () => {
   const shellFileCount = shellFiles().length;
@@ -21,8 +21,7 @@ describe('should check if database is configured properly', () => {
   const args = {
     host: 'localhost',
     port: '3307',
-    database: 'vault',
-    waitForConnections: true
+    database: 'vault'
   };
   const root = mysql.createConnection({
     ...args,
