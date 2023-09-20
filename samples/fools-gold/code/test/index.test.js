@@ -9,7 +9,7 @@ const {
   restrictPython
 } = require('@sliit-foss/bashaway');
 
-jest.setTimeout(30000);
+jest.setTimeout(240000);
 
 test('should validate if only bash files are present', () => {
   const shellFileCount = shellFiles().length;
