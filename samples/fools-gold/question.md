@@ -1,6 +1,6 @@
-## Buried Treasure
+## Fools Gold
 
-Within the treacherous waters of the Grand Line, a pirate captain was burying his treasure on a remote island. He chose to **set up a digital MySQL chest on port 3306, guarded by a fierce root key of "devils-labyrinth" and a strict limit of 1 connection**.
+Within the treacherous waters of the Grand Line, a pirate captain was burying his treasure on a remote island. He chose to **set up a digital MySQL chest on port 3307, guarded by a fierce root key of "fools-gold" and a strict limit of 1 connection**.
 
 Just in case this key was lost, he also **created a user account with the username "ace" and the password "firefist"**. This key had the ability to unlock the entirety of the treasure. The captain was confident that his treasure was safe, but he was wrong.
 
@@ -18,7 +18,7 @@ The crew was dissapointed, decided to leave the treasure behind and sail off int
 
 ### Output
 
-- A local mysql instance running on **port 3306** with the **root user having the password "devils-labyrinth"** and a **user named "ace" with the password "firefist"** with a **database named vault** and a **table named gold** with the following fields:
+- A local mysql instance running on **port 3307** with the **root user having the password "fools-gold"** and a **user named "ace" with the password "firefist"** with a **database named vault** and a **table named gold** with the following fields:
 
   - id (int)
   - name (string)
