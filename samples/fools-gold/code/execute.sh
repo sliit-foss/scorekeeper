@@ -1,17 +1,16 @@
 docker stop mysql || true && docker rm mysql || true
 
-docker run -e MYSQL_ROOT_PASSWORD='fools-gold' -e MYSQL_ROOT_HOST='%' -e MYSQL_DATABASE=vault -d --name mysql --restart=always -p 3307:3306 mysql/mysql-server:latest
+docker run -e MYSQL_ROOT_PASSWORD='fools-gold' -e MYSQL_USER=ace -e MYSQL_PASSWORD=firefist -e MYSQL_ROOT_HOST='%' -e MYSQL_DATABASE=vault -d --name mysql --restart=always -p 3307:3306 mysql/mysql-server:latest
 
 sudo apt-get update
 
 sudo apt-get install -y mysql-client
 
-docker exec mysql /bin/sh -c "echo 'max_connections = 1' >> /etc/my.cnf"
+docker exec mysql /bin/sh -c "echo 'max_connections = 2' >> /etc/my.cnf"
 
 sleep 30
 
-sql="CREATE USER 'ace' IDENTIFIED BY 'firefist';
-USE vault;
+sql="USE vault;
 CREATE TABLE gold (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, value INT NOT NULL, PRIMARY KEY (id));
 INSERT INTO gold (name, value) VALUES ('gold1', 100);
 INSERT INTO gold (name, value) VALUES ('gold2', 200);

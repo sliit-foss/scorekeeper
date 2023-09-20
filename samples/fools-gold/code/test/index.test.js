@@ -9,7 +9,7 @@ const {
   restrictPython
 } = require('@sliit-foss/bashaway');
 
-jest.setTimeout(60000);
+jest.setTimeout(120000);
 
 test('should validate if only bash files are present', () => {
   const shellFileCount = shellFiles().length;
@@ -26,7 +26,8 @@ describe('should check if database is configured properly', () => {
   const root = mysql.createConnection({
     ...args,
     user: 'root',
-    password: 'fools-gold'
+    password: 'fools-gold',
+    waitForConnections: true
   });
 
   const ace = mysql.createConnection({
@@ -55,10 +56,24 @@ describe('should check if database is configured properly', () => {
     await connect(root);
   });
 
-  afterAll(() => root.end());
+  afterAll(() => {
+    root.end();
+    ace.end();
+  });
 
-  test('should check if connection limit is set to 1', async () => {
-    await expect(connect(ace)).rejects.toBe('failed to make initial database connection - Error: Too many connections');
+  test('should check if user is created with username ace and password firefist', async () => {
+    await expect(connect(ace)).resolves.toBe(true);
+  });
+
+  test('should check if connection limit is a maximum of 2', async () => {
+    const ace2 = mysql.createConnection({
+      ...args,
+      user: 'ace',
+      password: 'firefist'
+    });
+    await expect(connect(ace2).finally(() => ace2.end())).rejects.toBe(
+      'failed to make initial database connection - Error: Too many connections'
+    );
   });
 
   test('should check if data is populated', async () => {
