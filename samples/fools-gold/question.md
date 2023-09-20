@@ -1,6 +1,6 @@
 ## Fools Gold
 
-Within the treacherous waters of the Grand Line, a pirate captain was burying his treasure on a remote island. He chose to **set up a digital MySQL chest on port 3307, guarded by a fierce root key of "fools-gold" and a strict limit of 2 connections**.
+Within the treacherous waters of the Grand Line, a pirate captain was burying his treasure on a remote island. He chose to **set up** a digital **MySQL** chest **on port 3307**, guarded by a fierce **root key of "fools-gold" and a strict limit of 2 connections**.
 
 Just in case this key was lost, he also **created a user account with the username "ace" and the password "firefist"**. This key had the ability to unlock the entirety of the treasure. The captain was confident that his treasure was safe, but he was wrong.
 
@@ -10,7 +10,7 @@ On one fateful day, a rival pirate crew managed to steal one of these keys. They
 - name (string)
 - value (int).
 
-The crew was dissapointed, decided to leave the treasure behind and sail off into the distant sea.
+The thieves were dissapointed. They decided to leave the treasure behind and sail off into the distant sea.
 
 ### Constraints
 
@@ -26,4 +26,4 @@ The crew was dissapointed, decided to leave the treasure behind and sail off int
 
 - 5 random records populated in the table named **gold**
 
-- A connection limit of 2 to the mysql instance
+- A **connection limit of 2** to the mysql instance
