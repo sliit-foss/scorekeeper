@@ -60,7 +60,7 @@ jobs:
               cp -rf question/src ./submission
             fi
           fi
-          rm -rf submission/out
+          rm -rf submission/out submission/__MACOSX
 
       - name: Install submission dependencies
         run: cd submission && pnpm install --ignore-scripts --fix-lockfile
