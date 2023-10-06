@@ -34,10 +34,12 @@ curl --location 'https://api.github.com/repos/sliit-foss/scorekeeper/dispatches'
 --data-raw '{
     "event_type": "run-{{env}}-tests",
     "client_payload": {
+        "name": "Runtime Terror",
         "email": "akalankaperera128@gmail.com",
         "submission_id": "64d295ffc4d6d90618f8bf79",
         "submission_url": "{{url}}/submission.zip",
         "question_url": "{{url}}/question.zip",
+        "question_name": "Fool's Gold",
         "strict_inputs": true
     }
 }'
