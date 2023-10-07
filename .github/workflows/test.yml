@@ -31,14 +31,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --prod --ignore-scripts
 
-      - name: Email Workflow URL
-        run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --email "${{ github.event.client_payload.email }}"
-        env:
-          NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
-          NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
-          NODEMAILER_MAIL_USER: ${{ secrets.NODEMAILER_MAIL_USER }}
-          NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
-          NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
+      # - name: Email Workflow URL
+      #   run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --email "${{ github.event.client_payload.email }}"
+      #   env:
+      #     NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
+      #     NODEMAILER_MAIL_HOST: ${{ secrets.NODEMAILER_MAIL_HOST }}
+      #     NODEMAILER_MAIL_USER: ${{ secrets.NODEMAILER_MAIL_USER }}
+      #     NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
+      #     NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
 
       - name: Download and extract submission files
         run: |
