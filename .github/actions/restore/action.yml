@@ -1,0 +1,10 @@
+name: restore
+description: Restores test files
+runs:
+  using: composite
+  steps:
+    - run: |
+        rm -rf submission/test
+        cp -rf question/test ./submission
+        cp -f question/jest.config.js ./submission || true
+      shell: bash

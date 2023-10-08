@@ -11,6 +11,8 @@ const execute = (email, workflowUrl) => {
       disclaimer_text: "You've received this email because you have uploaded a submission to Bashaway 2023."
     },
     options: { to: email, subject: 'Bashaway submission test execution results' }
+  }).catch((err) => {
+    console.warn('Failed to email workflow link', err);
   });
 };
 

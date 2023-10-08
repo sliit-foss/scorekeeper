@@ -50,29 +50,44 @@ jobs:
           curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
           unzip question.zip -d question
 
-      - name: Restore tests and inputs
+      - name: Clean unnecessary files
+        uses: ./.github/actions/clean
+
+      - name: Restore tests
+        uses: ./.github/actions/restore
+
+      - name: Restore inputs
         run: |
-          cp -rf question/test ./submission
-          cp -f question/jest.config.js ./submission || true
           if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
             rm -rf submission/src
             if [ -d question/src ]; then
               cp -rf question/src ./submission
             fi
           fi
-          rm -rf submission/out submission/__MACOSX submission/.DS_Store submission/.vscode submission/.idea submission/.git
 
       - name: Install submission dependencies
         run: cd submission && pnpm install --ignore-scripts --fix-lockfile
 
+      - name: Install dos2unix
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: dos2unix
+
       - name: Execute answer script
         run: |
-          sudo apt-get install dos2unix
           dos2unix ./submission/execute.sh
           cd submission && bash execute.sh
 
+      - name: Clean unnecessary files
+        uses: ./.github/actions/clean
+        with:
+          preserve_output: true
+
+      - name: Restore tests
+        uses: ./.github/actions/restore
+
       - name: Run tests
-        run: cd submission && pnpm exec jest
+        run: cd submission && pnpm dlx jest@29.6.2
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
