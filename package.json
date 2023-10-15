@@ -1,6 +1,6 @@
 {
   "name": "scorekeeper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An automated testing and scoring solution which leverages the power of GitHub Actions",
   "main": "index.js",
   "scripts": {
