@@ -39,7 +39,7 @@ curl --location 'https://api.github.com/repos/sliit-foss/scorekeeper/dispatches'
         "submission_id": "64d295ffc4d6d90618f8bf79",
         "submission_url": "{{url}}/submission.zip",
         "question_url": "{{url}}/question.zip",
-        "question_name": "Fool's Gold",
+        "question_name": "Fools Gold",
         "strict_inputs": true
     }
 }'
