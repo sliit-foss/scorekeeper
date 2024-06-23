@@ -66,7 +66,7 @@ jobs:
           fi
 
       - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts --fix-lockfile --frozen-lockfile=false
+        run: cd submission && pnpm install --ignore-scripts --fix-lockfile
 
       - name: Install dos2unix
         uses: awalsh128/cache-apt-pkgs-action@latest
