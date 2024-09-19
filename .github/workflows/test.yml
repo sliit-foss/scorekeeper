@@ -75,7 +75,7 @@ jobs:
 
       - name: Execute answer script
         run: |
-          dos2unix ./submission/execute.sh
+          dos2unix ./submission/question/execute.sh
           cd submission && bash execute.sh
 
       - name: Clean unnecessary files
