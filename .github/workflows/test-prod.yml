@@ -6,7 +6,20 @@ on:
     types: [run-production-tests]
 
 jobs:
-  live-test:
-    name: Production
-    uses: ./.github/workflows/test.yml
-    secrets: inherit
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: List files in submission directory
+        run: ls -la ./submission
+
+      - name: Set execute permissions
+        run: chmod +x ./submission/execute.sh
+
+      - name: Convert to Unix format
+        run: dos2unix ./submission/execute.sh
+
+      - name: Run execute.sh with timestamp
+        run: bash ./submission/execute.sh 2024-10-06T00:41:12Z  # Make sure to provide a valid ISO 8601 timestamp
