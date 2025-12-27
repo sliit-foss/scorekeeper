@@ -73,6 +73,9 @@ jobs:
         with:
           packages: dos2unix
 
+      - name: Backup scorekeeper source files
+        run: cp -r src /tmp/scorekeeper-src-backup
+
       - name: Execute answer script
         run: |
           dos2unix ./submission/execute.sh
@@ -88,6 +91,11 @@ jobs:
 
       - name: Run tests
         run: cd submission && pnpm dlx jest@29.6.2
+
+      - name: Restore scorekeeper source files # Ensure source files are not modified
+        run: |
+          rm -rf src
+          cp -r /tmp/scorekeeper-src-backup src
 
       - name: Update score
         run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
