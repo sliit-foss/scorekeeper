@@ -83,6 +83,12 @@ jobs:
         with:
           preserve_output: true
 
+      - name: Download and extract question files again
+        run: |
+          rm -rf question question.zip
+          curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
+          unzip question.zip -d question
+
       - name: Restore tests
         uses: ./.github/actions/restore
 
