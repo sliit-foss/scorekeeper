@@ -46,14 +46,14 @@ jobs:
           curl -L "$url?$SAS_TOKEN" -o submission.zip
           unzip submission.zip -d submission
         env:
-          SAS_TOKEN: ${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}
+          SAS_TOKEN: ${{ secrets[format('{0}_SUBMISSION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
 
       - name: Download and extract question files
         run: |
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
         env:
-          SAS_TOKEN: ${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}
+          SAS_TOKEN: ${{ secrets[format('{0}_QUESTION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
 
       - name: Clean unnecessary files
         uses: ./.github/actions/clean
@@ -89,7 +89,7 @@ jobs:
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
         env:
-          SAS_TOKEN: ${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}
+          SAS_TOKEN: ${{ secrets[format('{0}_QUESTION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
 
       - name: Restore tests
         uses: ./.github/actions/restore
