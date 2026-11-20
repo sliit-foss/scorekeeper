@@ -8,7 +8,7 @@ const execute = (email, workflowUrl) => {
       text: 'Click below to view your test execution results.',
       action_link: workflowUrl,
       action_text: 'View Workflow Run',
-      disclaimer_text: "You've received this email because you have uploaded a submission to Bashaway 2023."
+      disclaimer_text: `You've received this email because you have uploaded a submission to Bashaway ${new Date().getFullYear()}.`
     },
     options: { to: email, subject: 'Bashaway submission test execution results' }
   }).catch((err) => {
