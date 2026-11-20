@@ -13,6 +13,9 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-22.04
     timeout-minutes: 5
+    env:
+      # Question packages pin pnpm 8, which cannot reach the registry on Node 20 and later
+      npm_config_manage_package_manager_versions: false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -22,12 +25,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 8.0.0
+          version: 10.34.9
 
-      - name: Install Node.js 18
+      - name: Install Node.js 24
         uses: actions/setup-node@v7
         with:
-          node-version: 18.x
+          node-version: 24.x
           package-manager-cache: false
 
       # - name: Email Workflow URL
