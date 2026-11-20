@@ -46,14 +46,14 @@ jobs:
           curl -L "$url?$SAS_TOKEN" -o submission.zip
           unzip submission.zip -d submission
         env:
-          SAS_TOKEN: ${{ secrets[format('{0}_SUBMISSION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
 
       - name: Download and extract question files
         run: |
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
         env:
-          SAS_TOKEN: ${{ secrets[format('{0}_QUESTION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
       - name: Clean unnecessary files
         uses: ./.github/actions/clean
@@ -89,7 +89,7 @@ jobs:
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
         env:
-          SAS_TOKEN: ${{ secrets[format('{0}_QUESTION_CONTAINER_SAS_TOKEN', inputs.application_environment)] }}
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
       - name: Restore tests
         uses: ./.github/actions/restore
@@ -114,5 +114,5 @@ jobs:
             -d '{"automatically_graded":true}'
         env:
           SUBMISSION_ID: ${{ github.event.client_payload.submission_id }}
-          BASHAWAY_SERVER_URL: ${{ secrets[format('BASHAWAY_{0}_SERVER_URL', inputs.application_environment)] }}
-          BASHAWAY_SERVER_API_KEY: ${{ secrets[format('BASHAWAY_{0}_SERVER_API_KEY', inputs.application_environment)] }}
+          BASHAWAY_SERVER_URL: ${{ inputs.application_environment == 'PRODUCTION' && secrets.BASHAWAY_PRODUCTION_SERVER_URL || secrets.BASHAWAY_STAGING_SERVER_URL }}
+          BASHAWAY_SERVER_API_KEY: ${{ inputs.application_environment == 'PRODUCTION' && secrets.BASHAWAY_PRODUCTION_SERVER_API_KEY || secrets.BASHAWAY_STAGING_SERVER_API_KEY }}
