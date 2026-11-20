@@ -6,30 +6,32 @@ on:
         required: false
         default: 'PRODUCTION'
 
-permissions: read-all
+permissions: {}
 
 jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-22.04
     timeout-minutes: 5
+    env:
+      # Question packages pin pnpm 8, which cannot reach the registry on Node 20 and later
+      npm_config_manage_package_manager_versions: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v6
         with:
-          version: 8.0.0
+          version: 10.34.9
 
-      - name: Install Node.js 18 and setup dependency caching
-        uses: actions/setup-node@v3
+      - name: Install Node.js 24
+        uses: actions/setup-node@v7
         with:
-          node-version: 18.x
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --prod --ignore-scripts
+          node-version: 24.x
+          package-manager-cache: false
 
       # - name: Email Workflow URL
       #   run: node src/index.js --script email-workflow-url --workflow-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" --email "${{ github.event.client_payload.email }}"
@@ -42,13 +44,19 @@ jobs:
 
       - name: Download and extract submission files
         run: |
-          curl -L "${{ github.event.client_payload.submission_url }}?${{ secrets.SUBMISSION_CONTAINER_SAS_TOKEN }}" -o submission.zip
+          url=$(jq -r '.client_payload.submission_url' "$GITHUB_EVENT_PATH")
+          echo "::add-mask::$url"
+          curl -L "$url?$SAS_TOKEN" -o submission.zip
           unzip submission.zip -d submission
+        env:
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
 
       - name: Download and extract question files
         run: |
-          curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
+          curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
+        env:
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
       - name: Clean unnecessary files
         uses: ./.github/actions/clean
@@ -68,14 +76,9 @@ jobs:
       - name: Install submission dependencies
         run: cd submission && pnpm install --ignore-scripts --fix-lockfile
 
-      - name: Install dos2unix
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: dos2unix
-
       - name: Execute answer script
         run: |
-          dos2unix ./submission/execute.sh
+          sed -i 's/\r$//' ./submission/execute.sh
           cd submission && bash execute.sh
 
       - name: Clean unnecessary files
@@ -86,8 +89,10 @@ jobs:
       - name: Download and extract question files again
         run: |
           rm -rf question question.zip
-          curl -L "${{ github.event.client_payload.question_url }}?${{ secrets.QUESTION_CONTAINER_SAS_TOKEN }}" -o question.zip
+          curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d question
+        env:
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
       - name: Restore tests
         uses: ./.github/actions/restore
@@ -95,13 +100,22 @@ jobs:
       - name: Run tests
         run: cd submission && pnpm dlx jest@29.6.2
 
-      - name: Restore src directory to original state
-        run: |
-          git checkout ${{ github.sha }} -- src
-          git clean -fd src
-
+  report:
+    name: Update Score
+    needs: test
+    runs-on: ubuntu-22.04
+    timeout-minutes: 2
+    environment:
+      name: grading
+      deployment: false
+    steps:
       - name: Update score
-        run: node src/index.js --script update-score --submission-id "${{ github.event.client_payload.submission_id }}"
+        run: |
+          curl -fsS --retry 3 -X PATCH "$BASHAWAY_SERVER_URL/api/submissions/$SUBMISSION_ID" \
+            -H "x-api-key: $BASHAWAY_SERVER_API_KEY" \
+            -H 'content-type: application/json' \
+            -d '{"automatically_graded":true}'
         env:
-          BASHAWAY_SERVER_URL: ${{ secrets[format('BASHAWAY_{0}_SERVER_URL', inputs.application_environment)] }}
-          BASHAWAY_SERVER_API_KEY: ${{ secrets[format('BASHAWAY_{0}_SERVER_API_KEY', inputs.application_environment)] }}
+          SUBMISSION_ID: ${{ github.event.client_payload.submission_id }}
+          BASHAWAY_SERVER_URL: ${{ inputs.application_environment == 'PRODUCTION' && secrets.BASHAWAY_PRODUCTION_SERVER_URL || secrets.BASHAWAY_STAGING_SERVER_URL }}
+          BASHAWAY_SERVER_API_KEY: ${{ inputs.application_environment == 'PRODUCTION' && secrets.BASHAWAY_PRODUCTION_SERVER_API_KEY || secrets.BASHAWAY_STAGING_SERVER_API_KEY }}
