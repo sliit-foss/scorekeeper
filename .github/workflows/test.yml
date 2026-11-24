@@ -58,6 +58,9 @@ jobs:
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
+      - name: Clean unnecessary files
+        uses: ./.github/actions/clean
+
       # Nothing from the team runs before the tests start, and only its script and inputs enter the folder the tests run in.
       - name: Add the script and inputs from the submission
         run: |
