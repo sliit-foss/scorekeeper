@@ -42,63 +42,50 @@ jobs:
       #     NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
       #     NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
 
-      - name: Download and extract submission files
+      - name: Download submission files
         run: |
           url=$(jq -r '.client_payload.submission_url' "$GITHUB_EVENT_PATH")
           echo "::add-mask::$url"
           curl -L "$url?$SAS_TOKEN" -o submission.zip
-          unzip submission.zip -d submission
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
+
+      - name: Extract submission files
+        run: unzip submission.zip -d submission
 
       - name: Download and extract question files
         run: |
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
-          unzip question.zip -d question
+          unzip question.zip -d graded
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
 
       - name: Clean unnecessary files
         uses: ./.github/actions/clean
 
-      - name: Restore tests
-        uses: ./.github/actions/restore
-
-      - name: Restore inputs
+      # Nothing from the team runs before the tests start, and only its script and inputs enter the folder the tests run in.
+      - name: Add the script and inputs from the submission
         run: |
-          if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
-            rm -rf submission/src
-            if [ -d question/src ]; then
-              cp -rf question/src ./submission
-            fi
+          if [ ! -f submission/execute.sh ] || [ -L submission/execute.sh ]; then
+            echo "execute.sh must be a regular file at the top level of the zip"
+            exit 1
           fi
-
-      - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts --fix-lockfile
-
-      - name: Execute answer script
-        run: |
-          sed -i 's/\r$//' ./submission/execute.sh
-          cd submission && bash execute.sh
-
-      - name: Clean unnecessary files
-        uses: ./.github/actions/clean
-        with:
-          preserve_output: true
-
-      - name: Download and extract question files again
-        run: |
-          rm -rf question question.zip
-          curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
-          unzip question.zip -d question
+          cp submission/execute.sh graded/execute.sh
+          sed -i 's/\r$//' graded/execute.sh
+          if [ "$STRICT_INPUTS" != "true" ] && [ -d submission/src ] && [ ! -L submission/src ]; then
+            rm -rf graded/src
+            cp -r submission/src graded/
+            find graded/src -type l -delete
+          fi
         env:
-          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
+          STRICT_INPUTS: ${{ github.event.client_payload.strict_inputs }}
 
-      - name: Restore tests
-        uses: ./.github/actions/restore
+      - name: Install question dependencies
+        run: cd graded && pnpm install --ignore-scripts --fix-lockfile
 
+      # Tests and mocks are read from the question's test folder only
       - name: Run tests
-        run: cd submission && pnpm dlx jest@29.6.2
+        run: cd graded && pnpm dlx jest@29.6.2 --roots "$PWD/test"
 
   report:
     name: Update Score

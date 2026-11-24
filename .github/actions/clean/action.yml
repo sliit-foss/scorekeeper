@@ -9,7 +9,7 @@ runs:
   using: composite
   steps:
     - run: |
-        cd submission
+        cd graded
         rm -rf __MACOSX coverage types yarn.lock package-lock.json \
         *.md .turbo .vscode .idea .gitignore .gitkeep .babelrc;
         if [ ${{ inputs.preserve_output }} = "false" ]; then
