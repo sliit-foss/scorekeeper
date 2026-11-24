@@ -51,54 +51,28 @@ jobs:
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
 
-      - name: Download and extract question files
+      # Nothing from the team runs before the tests start, and only its script and inputs enter the folder the tests run in.
+      - name: Build the grading folder
         run: |
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
-          unzip question.zip -d question
-        env:
-          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
-
-      - name: Clean unnecessary files
-        uses: ./.github/actions/clean
-
-      - name: Restore tests
-        uses: ./.github/actions/restore
-
-      - name: Restore inputs
-        run: |
-          if [ "${{ github.event.client_payload.strict_inputs }}" = "true" ]; then
-            rm -rf submission/src
-            if [ -d question/src ]; then
-              cp -rf question/src ./submission
-            fi
+          unzip question.zip -d graded
+          cp submission/execute.sh graded/execute.sh
+          sed -i 's/\r$//' graded/execute.sh
+          if [ "$STRICT_INPUTS" != "true" ] && [ -d submission/src ] && [ ! -L submission/src ]; then
+            rm -rf graded/src
+            cp -r submission/src graded/
+            find graded/src -type l -delete
           fi
-
-      - name: Install submission dependencies
-        run: cd submission && pnpm install --ignore-scripts --fix-lockfile
-
-      - name: Execute answer script
-        run: |
-          sed -i 's/\r$//' ./submission/execute.sh
-          cd submission && bash execute.sh
-
-      - name: Clean unnecessary files
-        uses: ./.github/actions/clean
-        with:
-          preserve_output: true
-
-      - name: Download and extract question files again
-        run: |
-          rm -rf question question.zip
-          curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
-          unzip question.zip -d question
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
+          STRICT_INPUTS: ${{ github.event.client_payload.strict_inputs }}
 
-      - name: Restore tests
-        uses: ./.github/actions/restore
+      - name: Install question dependencies
+        run: cd graded && pnpm install --ignore-scripts --fix-lockfile
 
+      # Tests and mocks are read from the question's test folder only
       - name: Run tests
-        run: cd submission && pnpm dlx jest@29.6.2
+        run: cd graded && pnpm dlx jest@29.6.2 --roots "$PWD/test"
 
   report:
     name: Update Score
