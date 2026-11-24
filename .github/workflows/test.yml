@@ -42,14 +42,16 @@ jobs:
       #     NODEMAILER_MAIL_PASSWORD: ${{ secrets.NODEMAILER_MAIL_PASSWORD }}
       #     NODEMAILER_MAIL_DISPLAY_USER: ${{ secrets.NODEMAILER_MAIL_DISPLAY_USER }}
 
-      - name: Download and extract submission files
+      - name: Download submission files
         run: |
           url=$(jq -r '.client_payload.submission_url' "$GITHUB_EVENT_PATH")
           echo "::add-mask::$url"
           curl -L "$url?$SAS_TOKEN" -o submission.zip
-          unzip submission.zip -d submission
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
+
+      - name: Extract submission files
+        run: unzip submission.zip -d submission
 
       - name: Download and extract question files
         run: |
