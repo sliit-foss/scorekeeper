@@ -1,9 +1,11 @@
 name: Run Production Tests
-run-name: '[${{ github.event.client_payload.question_name }} / ${{ github.event.client_payload.name }}] - ${{ github.event.client_payload.submission_id }}'
+run-name: 'Submission ${{ github.event.client_payload.submission_id }}'
 
 on:
   repository_dispatch:
     types: [run-production-tests]
+
+permissions: {}
 
 jobs:
   live-test:
