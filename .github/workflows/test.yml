@@ -51,11 +51,20 @@ jobs:
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
 
-      # Nothing from the team runs before the tests start, and only its script and inputs enter the folder the tests run in.
-      - name: Build the grading folder
+      - name: Download and extract question files
         run: |
           curl -L "$(jq -r '.client_payload.question_url' "$GITHUB_EVENT_PATH")?$SAS_TOKEN" -o question.zip
           unzip question.zip -d graded
+        env:
+          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
+
+      # Nothing from the team runs before the tests start, and only its script and inputs enter the folder the tests run in.
+      - name: Add the script and inputs from the submission
+        run: |
+          if [ ! -f submission/execute.sh ] || [ -L submission/execute.sh ]; then
+            echo "execute.sh must be a regular file at the top level of the zip"
+            exit 1
+          fi
           cp submission/execute.sh graded/execute.sh
           sed -i 's/\r$//' graded/execute.sh
           if [ "$STRICT_INPUTS" != "true" ] && [ -d submission/src ] && [ ! -L submission/src ]; then
@@ -64,7 +73,6 @@ jobs:
             find graded/src -type l -delete
           fi
         env:
-          SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_QUESTION_CONTAINER_SAS_TOKEN || secrets.STAGING_QUESTION_CONTAINER_SAS_TOKEN }}
           STRICT_INPUTS: ${{ github.event.client_payload.strict_inputs }}
 
       - name: Install question dependencies
