@@ -85,6 +85,7 @@ jobs:
 
       # Tests and mocks are read from the question's test folder only
       - name: Run tests
+        timeout-minutes: 2
         run: cd graded && pnpm dlx jest@29.6.2 --roots "$PWD/test"
 
   report:
