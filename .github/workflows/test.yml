@@ -50,8 +50,9 @@ jobs:
         env:
           SAS_TOKEN: ${{ inputs.application_environment == 'PRODUCTION' && secrets.PRODUCTION_SUBMISSION_CONTAINER_SAS_TOKEN || secrets.STAGING_SUBMISSION_CONTAINER_SAS_TOKEN }}
 
+      # unzip ends with 1 for a warning it has already dealt with, such as a zip made on Windows with backslashes in its paths
       - name: Extract submission files
-        run: unzip submission.zip -d submission
+        run: unzip submission.zip -d submission || [ $? -eq 1 ]
 
       - name: Download and extract question files
         run: |
